@@ -5,16 +5,22 @@ from util.common import domain, port, prefix, build_swagger_config_json
 from resources.swaggerConfig import SwaggerConfig
 from resources.userResource import UsersGETResource, UserGETResource, UserPOSTResource, UserPUTResource, UserDELETEResource
 from resources.eventResource import EventsGETResource, EventGETResource, EventPOSTResource, EventPUTResource, EventDELETEResource
-from resources.loginResource import  LoginPOSTResource
+from resources.loginResource import  LoginPOSTResource, LogoutGETResource
 from flask_swagger_ui import get_swaggerui_blueprint
-
+from flask_session import Session
+import secrets
 # ============================================x
 # Main
 # ============================================
-application = Flask(__name__)
-app = application
+   
+app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 CORS(app)
+
+secret_key = secrets.token_hex(16) 
+app.config['SECRET_KEY'] = secret_key
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 api = Api(app, prefix=prefix, catch_all_404s=True)
 
 # ============================================
@@ -85,6 +91,7 @@ api.add_resource(EventDELETEResource, '/events/<int:id>')
 
 # POST login
 api.add_resource(LoginPOSTResource, '/login')
+api.add_resource(LogoutGETResource, '/logout')
 
 if __name__ == '__main__':
     app.run(debug=True)
