@@ -9,12 +9,11 @@ import sqlite3
 auth = HTTPBasicAuth()
 
 @auth.verify_password
-def verify_password(email, password):
+def verify_password(email, password) -> bool:
     conn = sqlite3.connect('app.db')
     cursor = conn.cursor()
     cursor.execute("SELECT password FROM users WHERE email = ?", (email,))
     stored_password = cursor.fetchone()
-    conn.close()
     if stored_password is None:
         return False
     return stored_password[0] == password
@@ -30,9 +29,10 @@ class LoginPOSTResource(Resource):
         password = data.get('password')
         if verify_password(email, password):
             session['logged_in'] = True
-            return jsonify({"message": "Login successful!"})
+            return jsonify({"success": True,"message": "Login successful!"})
         else:
-            return jsonify({"message": "Invalid email or password"}), 401
+            print(jsonify({"success": "false","message": "Invalid email or password"}))
+            return jsonify({"success": False,"message": "Invalid email or password"})
     
     @auth.login_required
     def delete(self):

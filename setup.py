@@ -10,7 +10,9 @@ def create_database():
         name TEXT NOT NULL,
         email TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        about_me TEXT,
+        jobTitle TEXT,
+        profileImage TEXT,
+        aboutMe TEXT,
         experience INTEGER
     )
     ''')
@@ -33,11 +35,12 @@ def insert_dummy_data():
 
     # Insert dummy data into users table
     users = [
-        (None, 'John Doe', 'john@example.com', 'password', 'About John', 5),
-        (None, 'Jane Doe', 'jane@example.com', 'password', 'About Jane', 3),
+        (0, 'Seiko', 'sy946@bath.ac.uk', 'password','CEO Of MET','profileImage', '', 1),
+        (1, "Sam", 'sl3168@bath.ac.uk', '1234', "CTO", "profileImage", 'About Sam',2),
+        
     ]
     cursor.executemany('''
-        INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', users)
 
     # Insert dummy data into events table

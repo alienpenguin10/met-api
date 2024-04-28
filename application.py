@@ -9,6 +9,7 @@ from resources.loginResource import  LoginPOSTResource, LogoutGETResource
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_session import Session
 import secrets
+import ssl
 # ============================================x
 # Main
 # ============================================
@@ -71,7 +72,7 @@ api.add_resource(SwaggerConfig, '/swagger-config')
 
 # GET users
 api.add_resource(UsersGETResource, '/users')
-api.add_resource(UserGETResource, '/users/<int:id>')
+api.add_resource(UserGETResource, '/users/<string:email>')
 # POST users
 api.add_resource(UserPOSTResource, '/users')
 # PUT users
@@ -94,4 +95,6 @@ api.add_resource(LoginPOSTResource, '/login')
 api.add_resource(LogoutGETResource, '/logout')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.load_cert_chain('cert.pem', 'key.pem')
+    app.run(debug=True,ssl_context=context)
