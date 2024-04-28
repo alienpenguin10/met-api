@@ -20,9 +20,18 @@ def create_database():
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS events (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        event_name TEXT NOT NULL,
-        FOREIGN KEY(user_id) REFERENCES users(id)
+        name TEXT NOT NULL,
+        date DATE
+    )
+    ''')
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS user_events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        userId INTEGER,
+        eventId INTEGER,
+        FOREIGN KEY(userId) REFERENCES users(id),
+        FOREIGN KEY(eventId) REFERENCES events(id)
     )
     ''')
 
@@ -35,8 +44,8 @@ def insert_dummy_data():
 
     # Insert dummy data into users table
     users = [
-        (0, 'Seiko', 'sy946@bath.ac.uk', 'password','CEO Of MET','profileImage', '', 1),
-        (1, "Sam", 'sl3168@bath.ac.uk', '1234', "CTO", "profileImage", 'About Sam',2),
+        (None, 'Seiko', 'sy946@bath.ac.uk', 'password','CEO Of MET','profileImage', '', 1),
+        (None, "Sam", 'sl3168@bath.ac.uk', '1234', "CTO", "profileImage", 'About Sam',2),
         
     ]
     cursor.executemany('''
@@ -45,12 +54,23 @@ def insert_dummy_data():
 
     # Insert dummy data into events table
     events = [
-        (None, 1, 'Event 1'),
-        (None, 2, 'Event 2'),
+        (None, 'RebelMeetups','2024-04-23'),
+        (None, 'Future of AI', '2025-09-01'),
     ]
     cursor.executemany('''
         INSERT INTO events VALUES (?, ?, ?)
     ''', events)
+
+# Insert dummy data into user_events table
+    events_assignment = [
+        (None, 1, 1),
+        (None,1,2),
+        (None, 2, 1),
+    ]
+    cursor.executemany('''
+        INSERT INTO user_events VALUES (?, ?, ?)
+    ''', events_assignment)
+
 
     connection.commit()
     connection.close()

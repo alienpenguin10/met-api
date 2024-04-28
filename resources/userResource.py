@@ -1,7 +1,6 @@
 from flask_restful import Resource
 from flask import request
 import sqlite3
-import json
 
 def get_db_connection():
     conn = sqlite3.connect('app.db')
@@ -26,9 +25,7 @@ class UserPOSTResource(Resource):
     def post(self):
         user = request.get_json()
         conn = get_db_connection()
-        new_user_id = conn.execute(f"SELECT MAX(id) FROM users").fetchone()[0] + 1
-        print(new_user_id)
-        conn.execute(f'INSERT INTO users (id, name, email, password, jobTitle, profileImage, aboutMe, experience) VALUES (?, ?, ? ,? , ?, ?, ?, ?)', (new_user_id, user['name'], user['email'], user['password'], user["jobTitle"], user["profileImage"], user['aboutMe'], user['experience']))
+        conn.execute(f'INSERT INTO users (name, email, password, jobTitle, profileImage, aboutMe, experience) VALUES (?, ? ,? , ?, ?, ?, ?)', (user['name'], user['email'], user['password'], user["jobTitle"], user["profileImage"], user['aboutMe'], user['experience']))
         conn.commit()
         
         conn.close()
@@ -50,3 +47,4 @@ class UserDELETEResource(Resource):
         conn.commit()
         conn.close()
         return "", 204
+    

@@ -3,9 +3,10 @@ from flask_restful import Api, MethodNotAllowed, NotFound
 from flask_cors import CORS
 from util.common import domain, port, prefix, build_swagger_config_json
 from resources.swaggerConfig import SwaggerConfig
-from resources.userResource import UsersGETResource, UserGETResource, UserPOSTResource, UserPUTResource, UserDELETEResource
-from resources.eventResource import EventsGETResource, EventGETResource, EventPOSTResource, EventPUTResource, EventDELETEResource
-from resources.loginResource import  LoginPOSTResource, LogoutGETResource
+from resources.userResource import *
+from resources.eventResource import *
+from resources.loginResource import  *
+from resources.userEventsResource import *
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_session import Session
 import secrets
@@ -89,6 +90,13 @@ api.add_resource(EventPOSTResource, '/events')
 api.add_resource(EventPUTResource, '/events/<int:id>')
 # DELETE events
 api.add_resource(EventDELETEResource, '/events/<int:id>')
+
+# GET user events
+api.add_resource(UserEventsGETResource, '/users/<int:id>/events')
+# POST user events
+api.add_resource(UserEventsPOSTResource, '/users/<int:id>/events')
+# DELETE user events
+api.add_resource(UserEventsDELETEResource, '/users/<int:id>/events')
 
 # POST login
 api.add_resource(LoginPOSTResource, '/login')
