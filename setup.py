@@ -35,6 +35,18 @@ def create_database():
     )
     ''')
 
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS connections (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user1Id INTEGER,
+        user2Id INTEGER,
+        conversations REAL,
+        conversationLength REAL,
+        FOREIGN KEY(user1Id) REFERENCES users(id),
+        FOREIGN KEY(user2Id) REFERENCES users(id)
+    )
+    ''')
+
     connection.commit()
     connection.close()
 
@@ -70,6 +82,14 @@ def insert_dummy_data():
     cursor.executemany('''
         INSERT INTO user_events VALUES (?, ?, ?)
     ''', events_assignment)
+
+    # Insert dummy data into connections table
+    connections = [
+        (None, 1, 2, 10.0, 15.0),
+    ]
+    cursor.executemany('''
+        INSERT INTO connections VALUES (?, ?, ?, ?, ?)
+    ''', connections)
 
 
     connection.commit()

@@ -7,6 +7,7 @@ from resources.userResource import *
 from resources.eventResource import *
 from resources.loginResource import  *
 from resources.userEventsResource import *
+from resources.connectionsResource import *
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_session import Session
 import secrets
@@ -74,6 +75,7 @@ api.add_resource(SwaggerConfig, '/swagger-config')
 # GET users
 api.add_resource(UsersGETResource, '/users')
 api.add_resource(UserGETResource, '/users/<string:email>')
+api.add_resource(UserFromEmailGetResource, '/users/email/<string:email>')
 # POST users
 api.add_resource(UserPOSTResource, '/users')
 # PUT users
@@ -98,9 +100,23 @@ api.add_resource(UserEventsPOSTResource, '/users/<int:id>/events')
 # DELETE user events
 api.add_resource(UserEventsDELETEResource, '/users/<int:id>/events')
 
+# GET connections
+api.add_resource(ConnectionsGETResource, '/users/<int:id>/connections')
+
+# POST connections
+api.add_resource(ConnectionsPOSTResource, '/connections')
+
+# PUT connections
+api.add_resource(ConnectionsPUTResource, '/connections')
+
+# DELETE connections
+api.add_resource(ConnectionsDELETEResource, '/connections')
+
 # POST login
 api.add_resource(LoginPOSTResource, '/login')
 api.add_resource(LogoutGETResource, '/logout')
+
+
 
 if __name__ == '__main__':
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)

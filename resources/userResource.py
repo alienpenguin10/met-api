@@ -15,11 +15,20 @@ class UsersGETResource(Resource):
         return [dict(user) for user in users]
 
 class UserGETResource(Resource):
+    
+    def get(self, id):
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
+        conn.close()
+        return dict(user) if user else None
+    
+class UserFromEmailGetResource(Resource):
     def get(self, email):
         conn = get_db_connection()
         user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
         conn.close()
         return dict(user) if user else None
+    
 
 class UserPOSTResource(Resource):
     def post(self):
