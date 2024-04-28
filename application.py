@@ -119,6 +119,6 @@ api.add_resource(LogoutGETResource, '/logout')
 
 
 if __name__ == '__main__':
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('cert.pem', 'key.pem')
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('cert.pem', 'key.pem')
     app.run(debug=True,ssl_context=context)
