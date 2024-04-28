@@ -7,10 +7,10 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5007"
+      "url": "http://localhost:NoneNone"
     },
     {
-      "url": "http://localhost:5007"
+      "url": "http://None:NoneNone"
     }
   ],
   "tags": [

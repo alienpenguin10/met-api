@@ -3,12 +3,15 @@ from flask_restful import Api, MethodNotAllowed, NotFound
 from flask_cors import CORS
 from util.common import domain, port, prefix, build_swagger_config_json
 from resources.swaggerConfig import SwaggerConfig
-from resources.userResource import UsersGETResource, UserGETResource, UserPOSTResource, UserPUTResource, UserDELETEResource
-from resources.eventResource import EventsGETResource, EventGETResource, EventPOSTResource, EventPUTResource, EventDELETEResource
-from resources.loginResource import  LoginPOSTResource, LogoutGETResource
+from resources.userResource import *
+from resources.eventResource import *
+from resources.loginResource import  *
+from resources.userEventsResource import *
+from resources.connectionsResource import *
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_session import Session
 import secrets
+import ssl
 # ============================================x
 # Main
 # ============================================
@@ -71,7 +74,8 @@ api.add_resource(SwaggerConfig, '/swagger-config')
 
 # GET users
 api.add_resource(UsersGETResource, '/users')
-api.add_resource(UserGETResource, '/users/<int:id>')
+api.add_resource(UserGETResource, '/users/<string:email>')
+api.add_resource(UserFromEmailGetResource, '/users/email/<string:email>')
 # POST users
 api.add_resource(UserPOSTResource, '/users')
 # PUT users
@@ -89,9 +93,32 @@ api.add_resource(EventPUTResource, '/events/<int:id>')
 # DELETE events
 api.add_resource(EventDELETEResource, '/events/<int:id>')
 
+# GET user events
+api.add_resource(UserEventsGETResource, '/users/<int:id>/events')
+# POST user events
+api.add_resource(UserEventsPOSTResource, '/users/<int:id>/events')
+# DELETE user events
+api.add_resource(UserEventsDELETEResource, '/users/<int:id>/events')
+
+# GET connections
+api.add_resource(ConnectionsGETResource, '/users/<int:id>/connections')
+
+# POST connections
+api.add_resource(ConnectionsPOSTResource, '/connections')
+
+# PUT connections
+api.add_resource(ConnectionsPUTResource, '/connections')
+
+# DELETE connections
+api.add_resource(ConnectionsDELETEResource, '/connections')
+
 # POST login
 api.add_resource(LoginPOSTResource, '/login')
 api.add_resource(LogoutGETResource, '/logout')
 
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('cert.pem', 'key.pem')
+    app.run(debug=True,ssl_context=context)

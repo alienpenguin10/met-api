@@ -26,17 +26,17 @@ class EventPOSTResource(Resource):
     def post(self):
         event = request.get_json()
         conn = get_db_connection()
-        conn.execute('INSERT INTO events (user_id, event_name) VALUES (?, ?)', (event['user_id'], event['event_name']))
+        conn.execute('INSERT INTO events (name) VALUES (?, ?)', (event['name'],event['date']))
         conn.commit()
-        new_event_id = conn.execute('SELECT last_insert_rowid()').fetchone()[0]
+        new_eventId = conn.execute('SELECT last_insert_rowid()').fetchone()[0]
         conn.close()
-        return {'id': new_event_id, **event}
+        return {'id': new_eventId, **event}
 
 class EventPUTResource(Resource):
     def put(self, id):
         event = request.get_json()
         conn = get_db_connection()
-        conn.execute('UPDATE events SET user_id = ?, event_name = ? WHERE id = ?', (event['user_id'], event['event_name'], id))
+        conn.execute('UPDATE events SET userId = ?, name = ? WHERE id = ?', (event['name'],event['date'], id))
         conn.commit()
         conn.close()
         return {'id': id, **event}

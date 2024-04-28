@@ -1,7 +1,6 @@
 from flask_restful import Resource
 from flask import request
 import sqlite3
-import json
 
 def get_db_connection():
     conn = sqlite3.connect('app.db')
@@ -16,21 +15,30 @@ class UsersGETResource(Resource):
         return [dict(user) for user in users]
 
 class UserGETResource(Resource):
+    
     def get(self, id):
         conn = get_db_connection()
         user = conn.execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
         conn.close()
         return dict(user) if user else None
+    
+class UserFromEmailGetResource(Resource):
+    def get(self, email):
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+        conn.close()
+        return dict(user) if user else None
+    
 
 class UserPOSTResource(Resource):
     def post(self):
         user = request.get_json()
         conn = get_db_connection()
-        conn.execute('INSERT INTO users (name, email, password, about_me, experience) VALUES (?, ?)', (user['name'], user['email'], user['password'], user['about_me'], user['experience']))
+        conn.execute(f'INSERT INTO users (name, email, password, jobTitle, profileImage, aboutMe, experience) VALUES (?, ? ,? , ?, ?, ?, ?)', (user['name'], user['email'], user['password'], user["jobTitle"], user["profileImage"], user['aboutMe'], user['experience']))
         conn.commit()
-        new_user_id = conn.execute('SELECT last_insert_rowid()').fetchone()[0]
+        
         conn.close()
-        return {'id': new_user_id, **user}
+        return {'success':True}
 
 class UserPUTResource(Resource):
     def put(self, id):
@@ -48,3 +56,4 @@ class UserDELETEResource(Resource):
         conn.commit()
         conn.close()
         return "", 204
+    
