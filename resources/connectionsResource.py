@@ -1,4 +1,5 @@
 from flask_restful import Resource
+from flask_jwt_extended import jwt_required
 from flask import request
 import sqlite3
 
@@ -8,6 +9,7 @@ def get_db_connection():
     return conn
 
 class ConnectionsGETResource(Resource):
+    @jwt_required()
     def get(self,id):
         conn = get_db_connection()
         connections = conn.execute('SELECT * FROM connections WHERE user1Id = ? OR user2Id = ?',(id,id)).fetchall()
@@ -26,6 +28,7 @@ class ConnectionsGETResource(Resource):
         return result
 
 class ConnectionsPOSTResource(Resource):
+    @jwt_required()
     def post(self):
         connections = request.get_json()
         conn = get_db_connection()
@@ -35,6 +38,7 @@ class ConnectionsPOSTResource(Resource):
         return {'success':True}
 
 class ConnectionsPUTResource(Resource):
+    @jwt_required()
     def put(self):
         connections = request.get_json()
         conn = get_db_connection()
@@ -44,6 +48,7 @@ class ConnectionsPUTResource(Resource):
         return {'success':True}
 
 class ConnectionsDELETEResource(Resource):
+    @jwt_required()
     def delete(self):
         conn = get_db_connection()
         connections = request.get_json()

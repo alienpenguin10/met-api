@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import request
+from flask_jwt_extended import jwt_required
 import sqlite3
 import json
 
@@ -9,6 +10,7 @@ def get_db_connection():
     return conn
 
 class EventsGETResource(Resource):
+    @jwt_required()
     def get(self):
         conn = get_db_connection()
         events = conn.execute('SELECT * FROM events').fetchall()
@@ -16,6 +18,7 @@ class EventsGETResource(Resource):
         return [dict(event) for event in events]
 
 class EventGETResource(Resource):
+    @jwt_required()
     def get(self, id):
         conn = get_db_connection()
         event = conn.execute('SELECT * FROM events WHERE id = ?', (id,)).fetchone()
@@ -23,6 +26,7 @@ class EventGETResource(Resource):
         return dict(event) if event else None
 
 class EventPOSTResource(Resource):
+    @jwt_required()
     def post(self):
         event = request.get_json()
         conn = get_db_connection()
@@ -33,6 +37,7 @@ class EventPOSTResource(Resource):
         return {'id': new_eventId, **event}
 
 class EventPUTResource(Resource):
+    @jwt_required()
     def put(self, id):
         event = request.get_json()
         conn = get_db_connection()
@@ -42,6 +47,7 @@ class EventPUTResource(Resource):
         return {'id': id, **event}
 
 class EventDELETEResource(Resource):
+    @jwt_required()
     def delete(self, id):
         conn = get_db_connection()
         conn.execute('DELETE FROM events WHERE id = ?', (id,))

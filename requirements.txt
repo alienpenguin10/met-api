@@ -18,3 +18,4 @@ Werkzeug==3.0.1
 Flask-RESTful
 Flask-HTTPAuth
 Flask-Session
+flask-jwt-extended

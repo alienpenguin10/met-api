@@ -1,6 +1,8 @@
 from flask_restful import Resource
 from flask import request
+from flask_jwt_extended import jwt_required
 import sqlite3
+
 
 def get_db_connection():
     conn = sqlite3.connect('app.db')
@@ -8,14 +10,16 @@ def get_db_connection():
     return conn
 
 class UsersGETResource(Resource):
+    @jwt_required()
     def get(self):
         conn = get_db_connection()
         users = conn.execute('SELECT * FROM users').fetchall()
         conn.close()
         return [dict(user) for user in users]
 
+
 class UserGETResource(Resource):
-    
+    @jwt_required()
     def get(self, id):
         conn = get_db_connection()
         user = conn.execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
@@ -23,6 +27,7 @@ class UserGETResource(Resource):
         return dict(user) if user else None
     
 class UserFromEmailGetResource(Resource):
+    @jwt_required()
     def get(self, email):
         conn = get_db_connection()
         user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
@@ -31,6 +36,7 @@ class UserFromEmailGetResource(Resource):
     
 
 class UserPOSTResource(Resource):
+    @jwt_required()
     def post(self):
         user = request.get_json()
         conn = get_db_connection()
@@ -50,6 +56,7 @@ class UserPUTResource(Resource):
         return {'id': id, **user}
 
 class UserDELETEResource(Resource):
+    @jwt_required()
     def delete(self, id):
         conn = get_db_connection()
         conn.execute('DELETE FROM users WHERE id = ?', (id,))

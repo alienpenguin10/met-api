@@ -2,16 +2,18 @@ from flask import Flask, jsonify, redirect
 from flask_restful import Api, MethodNotAllowed, NotFound
 from flask_cors import CORS
 from util.common import domain, port, prefix, build_swagger_config_json
+from flask_swagger_ui import get_swaggerui_blueprint
+from flask_session import Session
+import secrets
+import ssl
+from flask_jwt_extended import JWTManager
 from resources.swaggerConfig import SwaggerConfig
 from resources.userResource import *
 from resources.eventResource import *
 from resources.loginResource import  *
 from resources.userEventsResource import *
 from resources.connectionsResource import *
-from flask_swagger_ui import get_swaggerui_blueprint
-from flask_session import Session
-import secrets
-import ssl
+
 # ============================================x
 # Main
 # ============================================
@@ -25,6 +27,14 @@ app.config['SECRET_KEY'] = secret_key
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 api = Api(app, prefix=prefix, catch_all_404s=True)
+
+# ============================================
+# Authentication
+# ============================================
+
+app.config['JWT_SECRET_KEY'] = secret_key
+jwt = JWTManager(app)
+
 
 # ============================================
 # Swagger
@@ -118,7 +128,8 @@ api.add_resource(LogoutGETResource, '/logout')
 
 
 
+
 if __name__ == '__main__':
     # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     # context.load_cert_chain('cert.pem', 'key.pem')
-    app.run(debug=True,ssl_context=context)
+    app.run(debug=True)
