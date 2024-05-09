@@ -1,5 +1,6 @@
 import sqlite3
 
+
 def create_database():
     connection = sqlite3.connect('app.db')
     cursor = connection.cursor()
@@ -42,13 +43,17 @@ def create_database():
         user2Id INTEGER,
         conversations REAL,
         conversationLength REAL,
+        confirmed INTEGER,
+        firstMet INTEGER,
         FOREIGN KEY(user1Id) REFERENCES users(id),
-        FOREIGN KEY(user2Id) REFERENCES users(id)
+        FOREIGN KEY(user2Id) REFERENCES users(id),
+        FOREIGN KEY (firstMet) REFERENCES events(id)
     )
     ''')
 
     connection.commit()
     connection.close()
+
 
 def insert_dummy_data():
     connection = sqlite3.connect('app.db')
@@ -56,9 +61,9 @@ def insert_dummy_data():
 
     # Insert dummy data into users table
     users = [
-        (None, 'Seiko', 'sy946@bath.ac.uk', 'password','CEO Of MET','profileImage', '', 1),
-        (None, "Sam", 'sl3168@bath.ac.uk', '1234', "CTO", "profileImage", 'About Sam',2),
-        
+        (None, 'Seiko', 'sy946@bath.ac.uk', 'password', 'CEO Of MET', 'profileImage', '', 1),
+        (None, "Sam", 'sl3168@bath.ac.uk', '1234', "CTO", "profileImage", 'About Sam', 2),
+
     ]
     cursor.executemany('''
         INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -66,17 +71,17 @@ def insert_dummy_data():
 
     # Insert dummy data into events table
     events = [
-        (None, 'RebelMeetups','2024-04-23'),
+        (None, 'RebelMeetups', '2024-04-23'),
         (None, 'Future of AI', '2025-09-01'),
     ]
     cursor.executemany('''
         INSERT INTO events VALUES (?, ?, ?)
     ''', events)
 
-# Insert dummy data into user_events table
+    # Insert dummy data into user_events table
     events_assignment = [
         (None, 1, 1),
-        (None,1,2),
+        (None, 1, 2),
         (None, 2, 1),
     ]
     cursor.executemany('''
@@ -85,17 +90,17 @@ def insert_dummy_data():
 
     # Insert dummy data into connections table
     connections = [
-        (None, 1, 2, 10.0, 15.0),
+        (None, 1, 2, 10.0, 15.0, int(True), 1),
+        (None, 1, 2, 5.0, 20.0, int(False), 1),
     ]
     cursor.executemany('''
-        INSERT INTO connections VALUES (?, ?, ?, ?, ?)
+        INSERT INTO connections VALUES (?, ?, ?, ?, ?, ?, ?)
     ''', connections)
-
 
     connection.commit()
     connection.close()
 
+
 if __name__ == "__main__":
     create_database()
     insert_dummy_data()
-    

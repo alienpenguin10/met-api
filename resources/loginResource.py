@@ -44,3 +44,5 @@ class LogoutGETResource(Resource):
         # Clear the session
         session.clear()
         return jsonify({"message": "Logged out successfully!"})
+
+

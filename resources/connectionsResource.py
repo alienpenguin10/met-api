@@ -23,6 +23,9 @@ class ConnectionsGETResource(Resource):
             dictConnection['user'] = dict(conn.execute('SELECT * FROM users WHERE id = ?', (otherId,)).fetchone())
             dictConnection.pop('user1Id')
             dictConnection.pop('user2Id')
+
+            dictConnection['firstMet'] = dict(conn.execute('SELECT * FROM events WHERE id = ?',(dictConnection['firstMet'])).fetchone())
+
             result.append(dictConnection)
         conn.close()
         return result
@@ -32,7 +35,9 @@ class ConnectionsPOSTResource(Resource):
     def post(self):
         connections = request.get_json()
         conn = get_db_connection()
-        conn.execute('INSERT INTO connections (user1Id,user2Id,conservations,conservationLength) VALUES (?, ?, ?, ?)', (connections['user1Id'],connections['user2Id'],connections['conservations'],connections['conservationLength']))
+        conn.execute('INSERT INTO connections (user1Id,user2Id,conversations,conversationLength,confirmed,firstMet) '
+                     'VALUES (?, ?, ?, ?)', (connections['user1Id'],connections['user2Id'],connections[
+            'conservations'],connections['conservationLength']))
         conn.commit()
         conn.close()
         return {'success':True}
