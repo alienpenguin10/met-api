@@ -30,7 +30,6 @@ class ConnectionsGETResource(Resource):
 
             result.append(dictConnection)
         conn.close()
-        print(result)
         return result
 
 
