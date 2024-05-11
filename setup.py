@@ -61,9 +61,11 @@ def insert_dummy_data():
 
     # Insert dummy data into users table
     users = [
-        (None, 'Seiko', 'sy946@bath.ac.uk', 'password', 'CEO Of MET', 'profileImage', '', 1),
-        (None, "Sam", 'sl3168@bath.ac.uk', '1234', "CTO", "profileImage", 'About Sam', 2),
-
+        (None, 'Seiko', 'sy946@bath.ac.uk', 'password', 'CEO Of MET', 'profileImage', 'About Seiko', 1),
+        (None, 'Sam', 'sl3168@bath.ac.uk', 'password', 'CTO', 'profileImage', 'About Sam', 1),
+        (None, 'Jonah', 'jk2258@bath.ac.uk', 'password', 'Software Engineer', 'profileImage', 'About Jonah', 1),
+        (None, 'Varnie', 'vk545@bath.ac.uk', 'password', 'Software Engineer', 'profileImage', 'About Varnie', 1),
+        (None, 'Han', 'ch2730@bath.ac.uk', 'password', 'Software Engineer', 'profileImage', 'About Han', 1)
     ]
     cursor.executemany('''
         INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -72,6 +74,7 @@ def insert_dummy_data():
     # Insert dummy data into events table
     events = [
         (None, 'RebelMeetups', '2024-04-23'),
+        (None, 'Bath Digital Festival', '2024-05-14'),
         (None, 'Future of AI', '2025-09-01'),
     ]
     cursor.executemany('''
@@ -80,9 +83,20 @@ def insert_dummy_data():
 
     # Insert dummy data into user_events table
     events_assignment = [
-        (None, 1, 1),
         (None, 1, 2),
-        (None, 2, 1),
+        (None, 1, 3),
+
+        (None, 2, 2),
+        (None, 2, 3),
+
+        (None, 3, 2),
+        (None, 3, 3),
+
+        (None, 4, 2),
+        (None, 4, 3),
+
+        (None, 5, 2),
+        (None, 5, 3),
     ]
     cursor.executemany('''
         INSERT INTO user_events VALUES (?, ?, ?)
@@ -91,7 +105,19 @@ def insert_dummy_data():
     # Insert dummy data into connections table
     connections = [
         (None, 1, 2, 10.0, 15.0, int(True), 1),
-        (None, 1, 2, 5.0, 20.0, int(False), 1),
+        (None, 1, 5, 5.0, 20.0, int(False), 1),
+        (None, 1, 4, 8.0, 10.0, int(True), 1),
+
+        (None, 2, 3, 5.0, 20.0, int(False), 1),
+        (None, 2, 4, 8.0, 10.0, int(True), 1),
+
+        (None, 3, 1, 5.0, 20.0, int(False), 1),
+        (None, 3, 4, 8.0, 10.0, int(True), 1),
+
+        (None, 4, 5, 8.0, 10.0, int(True), 1),
+
+        (None, 5, 2, 10.0, 15.0, int(True), 1),
+        (None, 5, 3, 5.0, 20.0, int(False), 1),
     ]
     cursor.executemany('''
         INSERT INTO connections VALUES (?, ?, ?, ?, ?, ?, ?)
