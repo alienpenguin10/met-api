@@ -117,7 +117,7 @@ def insert_dummy_data():
         (None, 4, 5, 2.0, 4.0, int(True), 1),
 
         (None, 5, 2, 12.0, 15.0, int(True), 1),
-        (None, 5, 3, 17.0, 22.0, int(False), 1),
+        (None, 5, 3, 9.0, 19.0, int(False), 1),
     ]
     cursor.executemany('''
         INSERT INTO connections VALUES (?, ?, ?, ?, ?, ?, ?)
