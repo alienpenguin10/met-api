@@ -6,6 +6,12 @@ from flask_jwt_extended import create_access_token
 import sqlite3
 
 
+def get_db_connection():
+    conn = sqlite3.connect('app.db')
+    conn.row_factory = sqlite3.Row  # This enables column access by name: row['column_name']
+    return conn
+
+
 def verify_password(email, password) -> bool:
     conn = sqlite3.connect('app.db')
     cursor = conn.cursor()
@@ -37,6 +43,18 @@ class LoginPOSTResource(Resource):
     def delete(self):
         session.pop('logged_in', None)
         return jsonify({"message": "Logged out successfully!"})
+
+
+class SignupPOSTResource(Resource):
+    def post(self):
+        user = request.get_json()
+        conn = get_db_connection()
+        conn.execute(
+            f'INSERT INTO users (name, email, password, jobTitle, profileImage, aboutMe, experience) VALUES (?, ? ,? , ?, ?, ?, ?)',
+            (user['name'], user['email'], user['password'], user["jobTitle"], user["profileImage"], user['aboutMe'],
+             user['experience']))
+        conn.commit()
+        return jsonify({"success":True})
 
 
 class LogoutGETResource(Resource):

@@ -126,6 +126,9 @@ api.add_resource(ConnectionsDELETEResource, '/connections')
 api.add_resource(LoginPOSTResource, '/login')
 api.add_resource(LogoutGETResource, '/logout')
 
+# POST signup
+api.add_resource(SignupPOSTResource, '/signup')
+
 
 
 

@@ -47,6 +47,7 @@ class UserPOSTResource(Resource):
         return {'success':True}
 
 class UserPUTResource(Resource):
+    @jwt_required()
     def put(self, id):
         user = request.get_json()
         conn = get_db_connection()
