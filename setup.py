@@ -111,7 +111,7 @@ def insert_dummy_data():
         (None, 2, 3, 5.0, 20.0, int(False), 1),
         (None, 2, 4, 8.0, 12.0, int(False), 1),
 
-        (None, 3, 1, 3.0, 26.0, int(False), 1),
+        (None, 3, 1, 3.0, 16.0, int(False), 1),
         (None, 3, 4, 6.0, 10.0, int(True), 1),
 
         (None, 4, 5, 2.0, 4.0, int(True), 1),

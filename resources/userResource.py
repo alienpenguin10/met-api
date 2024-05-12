@@ -9,6 +9,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row  # This enables column access by name: row['column_name']
     return conn
 
+
 class UsersGETResource(Resource):
     @jwt_required()
     def get(self):
@@ -25,7 +26,8 @@ class UserGETResource(Resource):
         user = conn.execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
         conn.close()
         return dict(user) if user else None
-    
+
+
 class UserFromEmailGetResource(Resource):
     @jwt_required()
     def get(self, email):
@@ -33,18 +35,22 @@ class UserFromEmailGetResource(Resource):
         user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
         conn.close()
         return dict(user) if user else None
-    
+
 
 class UserPOSTResource(Resource):
     @jwt_required()
     def post(self):
         user = request.get_json()
         conn = get_db_connection()
-        conn.execute(f'INSERT INTO users (name, email, password, jobTitle, profileImage, aboutMe, experience) VALUES (?, ? ,? , ?, ?, ?, ?)', (user['name'], user['email'], user['password'], user["jobTitle"], user["profileImage"], user['aboutMe'], user['experience']))
+        conn.execute(
+            f'INSERT INTO users (name, email, password, jobTitle, profileImage, aboutMe, experience) VALUES (?, ? ,? , ?, ?, ?, ?)',
+            (user['name'], user['email'], user['password'], user["jobTitle"], user["profileImage"], user['aboutMe'],
+             user['experience']))
         conn.commit()
-        
+
         conn.close()
-        return {'success':True}
+        return {'success': True}
+
 
 class UserPUTResource(Resource):
     @jwt_required()
@@ -56,6 +62,7 @@ class UserPUTResource(Resource):
         conn.close()
         return {'id': id, **user}
 
+
 class UserDELETEResource(Resource):
     @jwt_required()
     def delete(self, id):
@@ -64,4 +71,3 @@ class UserDELETEResource(Resource):
         conn.commit()
         conn.close()
         return "", 204
-    

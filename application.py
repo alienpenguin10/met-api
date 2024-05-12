@@ -84,7 +84,7 @@ api.add_resource(SwaggerConfig, '/swagger-config')
 
 # GET users
 api.add_resource(UsersGETResource, '/users')
-api.add_resource(UserGETResource, '/users/<string:email>')
+api.add_resource(UserGETResource, '/users/<int:id>')
 api.add_resource(UserFromEmailGetResource, '/users/email/<string:email>')
 # POST users
 api.add_resource(UserPOSTResource, '/users')
