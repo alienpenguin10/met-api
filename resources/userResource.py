@@ -1,6 +1,6 @@
 from flask_restful import Resource
-from flask import request
-from flask_jwt_extended import jwt_required
+from flask import request,jsonify
+from flask_jwt_extended import jwt_required,get_jwt_identity
 import sqlite3
 
 
@@ -66,8 +66,13 @@ class UserPUTResource(Resource):
 class UserDELETEResource(Resource):
     @jwt_required()
     def delete(self, id):
+        if id != get_jwt_identity():
+            return jsonify({"Success":False})
+
         conn = get_db_connection()
         conn.execute('DELETE FROM users WHERE id = ?', (id,))
+        conn.execute('DELETE FROM user_events WHERE userId = ?',(id,))
+        conn.execute('DELETE FROM connections WHERE user1Id = ? OR user2Id = ?', (id,id))
         conn.commit()
         conn.close()
-        return "", 204
+        return jsonify({"Success":True})

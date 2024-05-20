@@ -12,14 +12,14 @@ def get_db_connection():
     return conn
 
 
-def verify_password(email, password) -> bool:
+def verify_password(email, password) -> int:
     conn = sqlite3.connect('app.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT password FROM users WHERE email = ?", (email,))
+    cursor.execute("SELECT id FROM users WHERE email = ? AND password = ?", (email,password))
     stored_password = cursor.fetchone()
     if stored_password is None:
-        return False
-    return stored_password[0] == password
+        return -1
+    return stored_password[0]
 
 
 class LoginPOSTResource(Resource):
@@ -30,11 +30,11 @@ class LoginPOSTResource(Resource):
         data = request.get_json()
         email = data.get('email')
         password = data.get('password')
+        id = verify_password(email,password)
 
-        if verify_password(email, password):
+        if id != -1:
             session['logged_in'] = True
-
-            access_token = create_access_token(identity=email)
+            access_token = create_access_token(identity=id)
             return jsonify({"success": True, "message": "Login successful!", "accessToken": access_token})
         else:
             return jsonify({"success": False, "message": "Invalid email or password", "accessToken": ""})
