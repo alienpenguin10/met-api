@@ -67,7 +67,7 @@ class UserDELETEResource(Resource):
     @jwt_required()
     def delete(self, id):
         if id != get_jwt_identity():
-            return jsonify({"Success":False})
+            return jsonify({"success":False})
 
         conn = get_db_connection()
         conn.execute('DELETE FROM users WHERE id = ?', (id,))
@@ -75,4 +75,4 @@ class UserDELETEResource(Resource):
         conn.execute('DELETE FROM connections WHERE user1Id = ? OR user2Id = ?', (id,id))
         conn.commit()
         conn.close()
-        return jsonify({"Success":True})
+        return jsonify({"success":True})
